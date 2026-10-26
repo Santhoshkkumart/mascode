@@ -1,84 +1,99 @@
 # MasCode
 
-MasCode is a local-first coding practice desktop app. Its embedded editor highlights C++, Python, and Java, checks syntax as you type, and runs programs using the compilers installed on your computer. Code is not sent to a cloud compiler.
+MasCode is a desktop coding practice app that runs code on your own computer. It includes a syntax-highlighted editor, local compiler/runtime integration for C++, Python, and Java, and an offline practice set based on the NeetCode 150 roadmap.
 
-## Install a release
+## Features
 
-Download the installer for your operating system from the repository's **GitHub Releases** page.
+- Edit code with syntax highlighting, indentation, and syntax checks.
+- Compile and run C++ and Java, and run Python using locally installed language tools.
+- Browse 150 practice problems with descriptions, examples, constraints, Python starter functions, reference solutions, and bundled tests.
+- Track solved problems, activity streaks, and profile details locally.
+- See test results, measured runtime, and submitted time/space complexity estimates.
+
+The bundled problem runner currently evaluates Python solutions. The editor's C++, Python, and Java run controls execute user code locally; C++ and Java are not wired into the bundled problem test suites.
+
+## Install a packaged release
+
+Download the release for your operating system from [GitHub Releases](https://github.com/Santhoshkkumart/mascode/releases). If no release is available yet, build from source using the instructions below.
 
 ### Windows
 
-1. Download `MasCode-<version>-Setup.exe`.
-2. Run it and follow the installer. It installs for your Windows user and adds a Start menu shortcut; the desktop shortcut can be selected in setup.
-3. Install the language tools you want to use and add them to `PATH`:
-   - C++: `g++` (for example, MSYS2 MinGW UCRT64)
-   - Python: Python 3 (`python` command)
-   - Java: JDK (`java` and `javac` commands)
+1. Download `MasCode-<version>-Setup.exe` and run it.
+2. Install the language tools you need and make sure they are available on `PATH`:
+   - C++: `g++` (for example, through [MSYS2](https://www.msys2.org/), using the UCRT64 environment)
+   - Python: Python 3, available as `python`
+   - Java: a JDK, providing `java` and `javac`
+
+The Windows installer is currently unsigned, so Windows may display a publisher warning.
 
 ### Linux
 
-Choose one of the release formats:
+1. Download `MasCode-<version>-x86_64.AppImage`.
+2. In a terminal, make it executable and launch it:
 
-- **AppImage** works on most desktop Linux distributions without installation. Make it executable and launch it:
+   ```sh
+   chmod +x MasCode-<version>-x86_64.AppImage
+   ./MasCode-<version>-x86_64.AppImage
+   ```
 
-  ```sh
-  chmod +x MasCode-<version>-x86_64.AppImage
-  ./MasCode-<version>-x86_64.AppImage
-  ```
+If the AppImage cannot start because FUSE is unavailable, try:
 
-If the AppImage cannot mount because FUSE support is missing, launch it with `./MasCode-<version>-x86_64.AppImage --appimage-extract-and-run`.
+```sh
+./MasCode-<version>-x86_64.AppImage --appimage-extract-and-run
+```
 
-Ubuntu/Debian users can run the AppImage above; the release does not currently include a DEB installer.
-
-Install the language tools you need (`g++`, Python 3, and/or a JDK) using your distribution's package manager. They must be available on `PATH`.
+Install the language tools you plan to use through your distribution's package manager. They must be available on `PATH` (`g++`, Python 3, and/or a JDK). MasCode currently publishes an AppImage rather than a DEB or RPM package.
 
 ## Build from source
 
-Requirements: Node.js 22 or newer, npm, and Git. Install the compilers/runtimes for the languages you plan to use as described above.
+### Requirements
+
+- Git
+- Node.js 22 or newer and npm
+- A C++ compiler, Python 3, and/or a JDK for the languages you plan to run
+
+Clone the repository, install dependencies, and start the development app:
 
 ```sh
-git clone <your-github-repository-url>
+git clone https://github.com/Santhoshkkumart/mascode.git
 cd mascode
 npm ci
 npm start
 ```
 
-Build installers on their target operating system:
+Build a distributable on the corresponding operating system:
 
 ```sh
 # Linux: AppImage
 npm run dist:linux
 
-# Windows: NSIS installer and ZIP archive (run this on Windows)
+# Windows: NSIS installer and ZIP archive (run on Windows)
 npm run dist:windows
 ```
 
-Build outputs go to `release/`. The Linux and Windows GitHub Actions workflow builds both sets of installers when code is pushed. Push a version tag such as `v1.0.1` to create a GitHub Release with the installers attached. The build does not sign the Windows installer; Windows may show the standard publisher warning for unsigned apps.
+Build artifacts are written to `release/`. Windows packages are built on Windows; Linux AppImages are built on Linux.
 
-After creating an empty GitHub repository, connect and push this folder:
+## Automated builds and releases
 
-```sh
-git remote add origin https://github.com/<your-name>/<repo-name>.git
-git push -u origin main
-```
+GitHub Actions builds Linux and Windows packages for pushes, pull requests, and manual workflow runs. Download those build artifacts from the corresponding workflow run.
 
-For a release, make sure `package.json` has the version you want (for example `1.0.0`), commit and push that change, then tag it with the `v` prefix:
+To publish a GitHub Release, update the version in `package.json`, commit and push the change, then create and push a version tag. For example:
 
 ```sh
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.0.1
+git push origin v1.0.1
 ```
 
-## Practice and progress
+The tag workflow builds both platforms and attaches the installers to a GitHub Release. GitHub Actions requires the repository's default `GITHUB_TOKEN` to have permission to create releases; the workflow grants `contents: write` to its release job.
 
-The NeetCode 150 selector includes 150 problem descriptions, examples, constraints, Python function starters, reference answers, and test suites offline. Select a problem to load its blank function into the editor. **Run test cases** checks it without marking the problem solved; **Submit solution** checks all bundled tests, records accepted progress, and advances to the next unsolved problem. You can enter Big O time and space estimates to include in the result; MasCode measures runtime but does not infer asymptotic complexity.
+## Progress and local data
 
-The Progress menu tracks solved problems by topic and daily activity streaks. Profile details and progress are stored locally on the device.
+Problem progress, activity streaks, and profile details are stored on the device in the app's local storage. They are not synchronized between computers.
 
 ## Attribution and licenses
 
-The bundled Python solutions, problem descriptions, examples, constraints, and test suites are from [richard7ao/neetcode-150](https://github.com/richard7ao/neetcode-150), commit `83adb3ffd8e674ea00d7d763a77c130d57ff8cb9`, under Apache License 2.0. The license is included at `src/solutions/LICENSE`. That project attributes solution code to [jomalonelondon/neetcode-solutions](https://github.com/jomalonelondon/neetcode-solutions), also Apache 2.0. Hidden platform tests are not included; visit the [official NeetCode page](https://neetcode.io/practice/practice/neetcode150) for the official roadmap.
+The bundled problem descriptions, examples, constraints, Python reference solutions, and tests are based on [richard7ao/neetcode-150](https://github.com/richard7ao/neetcode-150), commit `83adb3ffd8e674ea00d7d763a77c130d57ff8cb9`, under the Apache License 2.0. The license is included at `src/solutions/LICENSE`. That project attributes solution code to [jomalonelondon/neetcode-solutions](https://github.com/jomalonelondon/neetcode-solutions), also under Apache 2.0. MasCode's bundled tests are local practice tests; they do not include hidden platform tests. See the [official NeetCode 150 roadmap](https://neetcode.io/practice/practice/neetcode150).
 
-## Local execution note
+## Running code safely
 
-Programs run with your operating-system user permissions. The runner is intended for your own code, not untrusted programs. C++ and Java compile in a temporary directory; Python runs directly. Temporary source and binaries are removed after each run.
+Programs run with the current operating-system user's permissions. The runner is intended for code you trust, not untrusted programs. C++ and Java compile in a temporary directory, Python runs directly, and temporary files are removed after execution.

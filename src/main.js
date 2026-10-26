@@ -4,6 +4,12 @@ const os = require('node:os');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const solutionsDir = path.join(__dirname, 'solutions');
+// fs.readFile works with files inside app.asar, but directory operations such
+// as fs.cp/opendir need a real filesystem directory. Keep the Python helpers
+// outside the archive in packaged builds so the test runner can copy them.
+const solutionsLibDir = app.isPackaged
+  ? path.join(process.resourcesPath, 'app.asar.unpacked', 'src', 'solutions', 'lib')
+  : path.join(solutionsDir, 'lib');
 const solutionIndex = require(path.join(solutionsDir, 'index.json'));
 const solutionById = new Map(solutionIndex.map(item => [item.id, item]));
 function createWindow() {
@@ -63,7 +69,7 @@ ipcMain.handle('run-problem-tests', async (_event, { id, code }) => {
     await fs.mkdir(problemDir, { recursive: true });
     await fs.writeFile(solutionPath, code, 'utf8');
     await fs.copyFile(testsSource, testPath);
-    await fs.cp(path.join(solutionsDir, 'lib'), path.join(dir, 'lib'), { recursive: true });
+    await fs.cp(solutionsLibDir, path.join(dir, 'lib'), { recursive: true });
     await fs.writeFile(harnessPath, harness, 'utf8');
     const command = process.platform === 'win32' ? 'python' : 'python3';
     const result = await run(command, ['-B', harnessPath], { cwd: dir, timeout: 20000, env: { PYTHONDONTWRITEBYTECODE: '1' } });

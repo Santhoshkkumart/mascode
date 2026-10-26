@@ -25,6 +25,9 @@
   "build": {
     "appId": "com.mascode.desktop",
     "asar": true,
+    "asarUnpack": [
+      "src/solutions/lib/**"
+    ],
     "directories": {
       "output": "release",
       "buildResources": "build"
