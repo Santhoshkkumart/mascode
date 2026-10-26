@@ -2,18 +2,63 @@
   "name": "mascode",
   "version": "1.0.0",
   "productName": "MasCode",
+  "desktopName": "com.mascode.desktop",
   "description": "A local-first coding practice and compiler desktop app",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist:linux": "electron-builder --linux AppImage rpm",
+    "dist:windows": "electron-builder --win nsis zip"
   },
   "devDependencies": {
-    "electron": "^33.2.1"
+    "electron": "^33.2.1",
+    "electron-builder": "^26.18.0"
   },
   "allowScripts": {
-    "electron@33.4.11": true
+    "electron@33.4.11": true,
+    "electron-winstaller@5.4.0": true
   },
   "dependencies": {
     "codemirror": "^5.65.21"
+  },
+  "build": {
+    "appId": "com.mascode.desktop",
+    "asar": true,
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json",
+      "README.md"
+    ],
+    "linux": {
+      "icon": "build/icons",
+      "category": "Development",
+      "target": [
+        "AppImage",
+        "rpm"
+      ],
+      "syncDesktopName": true,
+      "maintainer": "MasCode Contributors",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "win": {
+      "icon": "build/icons/mascode.ico",
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "artifactName": "${productName}-${version}-Setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }

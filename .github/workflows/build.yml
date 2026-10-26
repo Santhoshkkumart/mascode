@@ -1,0 +1,72 @@
+name: Build MasCode installers
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linux
+            script: dist:linux
+          - os: windows-latest
+            platform: windows
+            script: dist:windows
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run ${{ matrix.script }}
+      - name: Upload Linux installers
+        if: matrix.platform == 'linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mascode-linux
+          path: |
+            release/*.AppImage
+            release/*.rpm
+          if-no-files-found: error
+      - name: Upload Windows installers
+        if: matrix.platform == 'windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mascode-windows
+          path: |
+            release/*.exe
+            release/*.zip
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: mascode-*
+          path: release
+          merge-multiple: true
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          mapfile -t assets < <(find release -maxdepth 1 -type f \( -name '*.AppImage' -o -name '*.rpm' -o -name '*.exe' -o -name '*.zip' \) -print)
+          gh release create "$TAG_NAME" "${assets[@]}" --title "MasCode $TAG_NAME" --generate-notes
