@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MasCode</title><link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css"><link rel="stylesheet" href="styles.css"></head>
+<body><div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-icon">M</div><div><b>MASCODE</b><small>LOCAL CODE STUDIO</small></div></div>
+    <button class="nav active" id="workspaceNav"><span>◫</span> Workspace</button><button class="nav" id="roadmapNav"><span>▤</span> NeetCode 150</button><button class="nav" id="progressNav"><span>◷</span> Progress</button><button class="nav" id="profileNav"><span>◉</span> Profile</button>
+    <div class="side-label">YOUR WORKSPACE</div>
+    <div class="side-project"><i></i><div><b>Practice session</b><small>Saved on this device</small></div></div>
+    <div class="side-foot"><div class="local-dot"></div><div><b id="sidebarProfileName">Local execution</b><small>Your code stays on this computer</small></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="crumb">Workspace <span>/</span> <b>Practice session</b></div><div class="top-right"><span class="hardware"><i></i> SYSTEM HARDWARE</span><button id="runTop" class="run-btn">▶ &nbsp;Run code</button></div></header>
+    <section class="content">
+      <div class="welcome"><div><div class="eyebrow">MASCODE · LOCAL CODING WORKSPACE</div><h1>Build. Run. Learn.</h1><p>Write code and run it on your own machine. No remote compiler, no account needed.</p></div><div class="computer-art">▰<span>▱</span></div></div>
+      <div class="stats"><div class="stat"><small>PROCESSOR</small><b id="cpuLabel">Detecting…</b></div><div class="stat"><small>AVAILABLE LANGUAGES</small><b>C++ &nbsp;·&nbsp; Python &nbsp;·&nbsp; Java</b></div><div class="stat"><small>NEETCODE ROADMAP</small><b>150 problems · 18 topics</b></div></div>
+      <section class="problem-card"><div class="problem-toolbar"><div class="problem-title"><span class="tag">NEETCODE 150</span><span class="difficulty" id="questionDifficulty">SELECT A PROBLEM</span></div><div class="problem-picker"><input id="problemSearch" class="problem-search" placeholder="Search 150 problems" aria-label="Search problems"><select id="problemSelect" class="problem-select" aria-label="Choose a problem"><option value="">Loading problems…</option></select></div></div><h2 id="problemTitle" class="selected-question-title">Choose a problem</h2><p id="questionInfo">Choose a problem to load the full question, examples, and function signature.</p><div id="questionBody" class="question-body"></div><div class="problem-actions"><button id="officialLink" class="text-link">Open problem ↗</button><div class="problem-disclosures"><button id="showTests" class="text-link" disabled>Show bundled test suite</button><button id="showAnswer" class="text-link" disabled>Show answer</button></div></div><div class="testcase-area"><pre id="testcaseCode" hidden></pre></div><div class="answer-area"><div class="answer-head"><b>Reference answer · Python</b></div><pre id="solutionCode" hidden>Select a problem, then reveal its answer.</pre></div></section>
+      <div class="workspace-grid">
+        <section class="editor-card"><div class="card-head"><div><span class="live-dot"></span><b>Your solution</b></div><div class="lang-wrap"><span>LANGUAGE</span><select id="language"><option value="python">Python 3</option><option value="cpp">C++17</option><option value="java">Java</option></select></div></div>
+          <div class="editor-wrap"><textarea id="editor" spellcheck="false" aria-label="Code editor"></textarea></div>
+          <div class="input-row"><label for="stdin">STDIN</label><input id="stdin" placeholder="Optional input passed to your program" /></div>
+          <div class="complexity-inputs"><label>Time complexity (Big O)<input id="timeComplexity" placeholder="e.g. O(n log n)" maxlength="32"></label><label>Space complexity (Big O)<input id="spaceComplexity" placeholder="e.g. O(n)" maxlength="32"></label><span>Enter your complexity estimates; MasCode measures runtime and does not infer Big O.</span></div>
+          <div class="editor-actions"><span class="hint" id="runHint">Function-style Python test runner</span><div class="action-buttons"><button id="runTestsBtn" class="test-btn">✓ &nbsp;Run test cases</button><button id="submitBtn" class="submit-btn">↥ &nbsp;Submit solution</button><button id="runBtn" class="run-btn">▶ &nbsp;Run code</button></div></div>
+        </section>
+        <section class="right-column"><div class="output-card"><div class="output-head"><b>Evaluation</b><span id="runStatus">READY</span></div><div id="resultSummary" class="result-summary result-idle"><b>Ready when you are</b><span>Run your code or submit it against the bundled tests.</span></div><div id="evalMetrics" class="eval-metrics" hidden></div><div id="caseResults" class="case-results"></div><div class="console-box"><div id="consoleLabel" class="console-label">PROGRAM OUTPUT</div><pre id="consoleOutput">Output and test results will appear here.</pre></div></div></section>
+      </div>
+      <footer><span><i class="local-dot"></i> Compiles and runs locally using your installed tools</span><span id="systemLine">Checking system…</span></footer>
+    </section>
+  </main>
+  <div id="panelOverlay" class="panel-overlay" hidden>
+    <section class="profile-panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
+      <header class="panel-header"><div><span class="eyebrow">MASCODE</span><h2 id="panelTitle">Progress</h2></div><button id="closePanel" class="close-btn" aria-label="Close">×</button></header>
+      <section id="progressView" class="panel-view">
+        <div id="progressStats" class="profile-stats"></div>
+        <div class="panel-card"><h3>Activity streak</h3><p class="panel-note">Daily practice is marked when you pass all test functions for a problem.</p><div id="progressHeatmap" class="heatmap"></div><div class="heatmap-legend"><span>Less</span><i></i><i></i><i></i><i></i><span>More</span></div></div>
+        <div class="panel-card"><div class="section-title"><h3>Topics</h3><span id="topicSolvedLabel"></span></div><div id="topicProgress" class="topic-progress"></div></div>
+        <div class="panel-card reset-card"><h3>Reset options</h3><p class="panel-note">Choose what to clear. These changes only affect MasCode on this device.</p><div class="reset-actions"><button id="resetSolved" class="secondary-btn">Reset solved problems</button><button id="resetStreak" class="secondary-btn">Reset streak history</button><button id="resetAll" class="danger-btn">Reset all progress</button></div></div>
+      </section>
+      <section id="profileView" class="panel-view" hidden>
+        <div class="profile-hero"><div id="profileAvatar" class="profile-avatar">M</div><div><h3 id="profileDisplayName">MasCode User</h3><span id="profileHandlePreview">@mascode-user</span></div></div>
+        <form id="profileForm" class="profile-form">
+          <label>Display name<input id="profileName" maxlength="48" autocomplete="name" /></label>
+          <label>Username<input id="profileHandle" maxlength="32" autocomplete="nickname" /></label>
+          <label>Email<input id="profileEmail" maxlength="120" type="email" autocomplete="email" /></label>
+          <label>About you<textarea id="profileBio" maxlength="240" rows="3" placeholder="A short note about your coding goals"></textarea></label>
+          <div class="profile-form-actions"><span id="profileSaved" class="save-note">Saved on this device</span><button class="run-btn" type="submit">Save profile</button></div>
+        </form>
+        <div class="panel-card profile-streak-card"><h3>Your streak</h3><div id="profileStreakStats" class="profile-stats compact"></div><div id="profileHeatmap" class="heatmap"></div></div>
+      </section>
+    </section>
+  </div>
+</div><script src="../node_modules/codemirror/lib/codemirror.js"></script><script src="../node_modules/codemirror/mode/clike/clike.js"></script><script src="../node_modules/codemirror/mode/python/python.js"></script><script src="renderer.js"></script></body></html>

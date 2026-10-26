@@ -1,0 +1,19 @@
+{
+  "name": "mascode",
+  "version": "1.0.0",
+  "productName": "MasCode",
+  "description": "A local-first coding practice and compiler desktop app",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^33.2.1"
+  },
+  "allowScripts": {
+    "electron@33.4.11": true
+  },
+  "dependencies": {
+    "codemirror": "^5.65.21"
+  }
+}
