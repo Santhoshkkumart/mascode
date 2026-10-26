@@ -8,7 +8,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist:linux": "electron-builder --linux AppImage rpm",
+    "dist:linux": "electron-builder --linux AppImage",
     "dist:windows": "electron-builder --win nsis zip"
   },
   "devDependencies": {
@@ -38,8 +38,7 @@
       "icon": "build/icons",
       "category": "Development",
       "target": [
-        "AppImage",
-        "rpm"
+        "AppImage"
       ],
       "syncDesktopName": true,
       "maintainer": "MasCode Contributors",

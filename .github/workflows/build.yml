@@ -39,7 +39,6 @@ jobs:
           name: mascode-linux
           path: |
             release/*.AppImage
-            release/*.rpm
           if-no-files-found: error
       - name: Upload Windows installers
         if: matrix.platform == 'windows'
@@ -68,5 +67,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG_NAME: ${{ github.ref_name }}
         run: |
-          mapfile -t assets < <(find release -maxdepth 1 -type f \( -name '*.AppImage' -o -name '*.rpm' -o -name '*.exe' -o -name '*.zip' \) -print)
+          mapfile -t assets < <(find release -maxdepth 1 -type f \( -name '*.AppImage' -o -name '*.exe' -o -name '*.zip' \) -print)
           gh release create "$TAG_NAME" "${assets[@]}" --title "MasCode $TAG_NAME" --generate-notes

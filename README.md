@@ -26,11 +26,7 @@ Choose one of the release formats:
   ./MasCode-<version>-x86_64.AppImage
   ```
 
-- **Fedora/RHEL RPM:**
-
-  ```sh
-  sudo dnf install ./MasCode-<version>-x86_64.rpm
-  ```
+If the AppImage cannot mount because FUSE support is missing, launch it with `./MasCode-<version>-x86_64.AppImage --appimage-extract-and-run`.
 
 Ubuntu/Debian users can run the AppImage above; the release does not currently include a DEB installer.
 
@@ -50,7 +46,7 @@ npm start
 Build installers on their target operating system:
 
 ```sh
-# Linux: AppImage and RPM
+# Linux: AppImage
 npm run dist:linux
 
 # Windows: NSIS installer and ZIP archive (run this on Windows)
@@ -58,6 +54,20 @@ npm run dist:windows
 ```
 
 Build outputs go to `release/`. The Linux and Windows GitHub Actions workflow builds both sets of installers when code is pushed. Push a version tag such as `v1.0.1` to create a GitHub Release with the installers attached. The build does not sign the Windows installer; Windows may show the standard publisher warning for unsigned apps.
+
+After creating an empty GitHub repository, connect and push this folder:
+
+```sh
+git remote add origin https://github.com/<your-name>/<repo-name>.git
+git push -u origin main
+```
+
+For a release, make sure `package.json` has the version you want (for example `1.0.0`), commit and push that change, then tag it with the `v` prefix:
+
+```sh
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ## Practice and progress
 
